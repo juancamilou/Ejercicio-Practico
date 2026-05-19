@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { actualizarProducto, obtenerProductos } from "../api";
+import { actualizarProducto, obtenerProductos, registrarCompra } from "../api";
 import LoadingOverlay from "./LoadingOverlay";
 import { useToast } from "./ToastContainer";
 
@@ -186,8 +186,30 @@ export default function PurchaseForm({
           await actualizarProducto(prod.id, { ...prod, stock: nuevaCantidad });
         }
       }
+      // Guardar cada item como registro de compra en la API
+      for (const item of carrito) {
+        const descuentoItem = subtotalCarrito
+          ? parseFloat(
+              (descuentoGlobal * (item.subtotal / subtotalCarrito)).toFixed(2),
+            )
+          : 0;
+        const totalItem = parseFloat(
+          (item.subtotal - descuentoItem).toFixed(2),
+        );
+        await registrarCompra({
+          productoId: item.productoId,
+          nombreProducto: item.nombre,
+          cantidad: item.cantidad,
+          precioUnitario: item.precio,
+          subtotal: item.subtotal,
+          descuento: descuentoItem,
+          total: totalItem,
+          nota,
+          fechaCompra: new Date().toISOString(),
+        });
+      }
 
-      // Guardar compra en localStorage (similar a una compra única pero con múltiples items)
+      // Guardar compra localmente para compatibilidad con el frontend actual
       const compras = JSON.parse(localStorage.getItem("compras") || "[]");
       const nuevaCompra = {
         id: Date.now(),

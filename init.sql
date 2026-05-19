@@ -44,3 +44,36 @@ SELECT * FROM productos;
 
 -- Verificar estructura de la tabla
 DESCRIBE productos;
+
+-- Crear tabla compras
+CREATE TABLE IF NOT EXISTS compras (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    producto_id BIGINT NOT NULL,
+    nombre_producto VARCHAR(100) NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DOUBLE NOT NULL,
+    subtotal DOUBLE NOT NULL,
+    descuento DOUBLE NOT NULL DEFAULT 0,
+    total DOUBLE NOT NULL,
+    nota VARCHAR(500),
+    fecha_compra DATETIME NOT NULL,
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Insertar compras de ejemplo
+INSERT INTO compras (producto_id, nombre_producto, cantidad, precio_unitario, subtotal, descuento, total, nota, fecha_compra) VALUES
+(1, 'Laptop HP 15', 1, 899.99, 899.99, 0, 899.99, 'Compra para equipo de ventas', '2025-11-05 10:15:00'),
+(4, 'Mouse Logitech MX Master 3', 1, 99.99, 99.99, 0, 99.99, 'Compra para equipo de ventas', '2025-11-05 10:17:00'),
+(7, 'SSD Samsung 1TB', 2, 149.99, 299.98, 20, 279.98, 'Actualización de almacenamiento', '2025-11-08 16:35:00'),
+(8, 'RAM DDR4 16GB', 1, 79.99, 79.99, 0, 79.99, 'Actualización de servidor', '2025-11-08 16:36:00'),
+(9, 'Windows 11 Pro', 1, 199.99, 199.99, 0, 199.99, 'Nueva licencia de sistema operativo', '2025-11-12 09:05:00'),
+(5, 'Hub USB-C 7 puertos', 1, 59.99, 59.99, 0, 59.99, 'Accesorios para estación de trabajo', '2025-11-12 09:06:00');
+
+-- Verificar que las compras fueron insertadas
+SELECT COUNT(*) as total_compras FROM compras;
+
+-- Ver todas las compras
+SELECT * FROM compras;
+
+-- Verificar estructura de la tabla
+DESCRIBE compras;

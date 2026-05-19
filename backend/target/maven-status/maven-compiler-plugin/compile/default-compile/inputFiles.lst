@@ -1,0 +1,13 @@
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\model\Producto.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\service\CompraService.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\service\ProductoService.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\exception\ErrorResponse.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\exception\GlobalExceptionHandler.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\exception\ProductoNoEncontradoException.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\repository\CompraRepository.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\repository\ProductoRepository.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\model\Compra.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\dto\ProductoDTO.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\controller\ProductoController.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\ApiRestProductosApplication.java
+C:\Users\juanc\Downloads\Ejercicio-Practico\backend\src\main\java\com\productos\api\controller\CompraController.java

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { eliminarCompra, obtenerCompras } from "../api";
 import { generarFacturaPDF } from "../utils/facturaGenerator";
-import LoadingSpinner from "./LoadingSpinner";
 import SkeletonLoader from "./SkeletonLoader";
 
 // Función para formatear moneda colombiana
@@ -16,25 +16,39 @@ const formatCOP = (valor: number) => {
 export default function PurchasesList() {
   const [compras, setCompras] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const getLocalCompras = () =>
+    JSON.parse(localStorage.getItem("compras") || "[]");
 
-  const load = () => {
+  const load = async () => {
     setLoading(true);
-    setTimeout(() => {
-      const c = JSON.parse(localStorage.getItem("compras") || "[]");
-      setCompras(c.reverse());
+    try {
+      const res = await obtenerCompras();
+      const c = res.data?.datos || res.data || [];
+      if (!Array.isArray(c) || c.length === 0) {
+        throw new Error("No hay compras en la API");
+      }
+      setCompras([...c].reverse());
+    } catch (error) {
+      const c = getLocalCompras();
+      setCompras([...c].reverse());
+    } finally {
       setLoading(false);
-    }, 300);
+    }
   };
 
   useEffect(() => {
     load();
   }, []);
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (!confirm("Eliminar registro?")) return;
-    const c = JSON.parse(localStorage.getItem("compras") || "[]");
-    const filtered = c.filter((x: any) => x.id !== id);
-    localStorage.setItem("compras", JSON.stringify(filtered));
+    try {
+      await eliminarCompra(id);
+    } catch (error) {
+      const c = getLocalCompras();
+      const filtered = c.filter((x: any) => x.id !== id);
+      localStorage.setItem("compras", JSON.stringify(filtered));
+    }
     load();
   };
 
@@ -45,7 +59,9 @@ export default function PurchasesList() {
         <SkeletonLoader count={3} />
       ) : compras.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">📭 No hay compras registradas.</p>
+          <p className="text-gray-500 text-lg">
+            📭 No hay compras registradas.
+          </p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -56,19 +72,18 @@ export default function PurchasesList() {
             >
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <div className="font-semibold text-lg">
-                    Factura #{c.id}
-                  </div>
+                  <div className="font-semibold text-lg">Factura #{c.id}</div>
                   <div className="text-sm text-gray-500">
-                    {new Date(c.fecha).toLocaleString("es-CO")}
+                    {new Date(c.fecha || c.fechaCompra).toLocaleString("es-CO")}
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-bold text-green-600">
-                    {formatCOP(c.total)}
+                    {formatCOP(c.total ?? c.subtotal ?? 0)}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {c.items?.length || 1} producto{c.items?.length !== 1 ? "s" : ""}
+                    {c.items?.length || 1} producto
+                    {c.items?.length !== 1 ? "s" : ""}
                   </div>
                 </div>
               </div>
@@ -76,15 +91,20 @@ export default function PurchasesList() {
               {c.items ? (
                 <div className="mb-2 bg-gray-50 p-2 rounded text-sm">
                   {c.items.map((item: any, idx: number) => (
-                    <div key={idx} className="flex justify-between text-xs mb-1">
-                      <span>{item.nombre} × {item.cantidad}</span>
+                    <div
+                      key={idx}
+                      className="flex justify-between text-xs mb-1"
+                    >
+                      <span>
+                        {item.nombre} × {item.cantidad}
+                      </span>
                       <span>{formatCOP(item.subtotal)}</span>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="mb-2 text-sm text-gray-600">
-                  {c.nombre} × {c.cantidad}
+                  {c.nombreProducto || c.nombre} × {c.cantidad}
                 </div>
               )}
 

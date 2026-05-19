@@ -35,6 +35,7 @@ mysql -u root -p < init.sql
 
 ```bash
 cd backend
+mvn clean install
 mvn spring-boot:run
 ```
 
@@ -44,6 +45,35 @@ mvn spring-boot:run
 cd frontend
 npm install
 npm run dev
+```
+
+5. Ejecutar pruebas con Newman
+
+Asegúrate de tener el backend corriendo en `http://localhost:8080` antes de ejecutar Newman.
+
+```bash
+# Instalar Newman globalmente (una sola vez)
+npm install -g newman
+
+# Verificar instalación
+newman -v
+
+# Ejecutar la colección desde la raíz del proyecto
+newman run postman-api.json
+```
+
+6. Generar reportes con Newman Reporter
+
+Para generar reportes HTML de las pruebas:
+
+```bash
+# Instalar el reporter HTML (una sola vez)
+npm install -g newman-reporter-htmlextra
+
+# Ejecutar con generación de reporte
+newman run postman-api.json -r htmlextra
+
+# El reporte se genera en ./newman/
 ```
 
 ## Nota

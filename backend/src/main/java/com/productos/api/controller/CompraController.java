@@ -20,7 +20,7 @@ import com.productos.api.model.Compra;
 import com.productos.api.service.CompraService;
 
 @RestController
-@RequestMapping("/api/compras")
+@RequestMapping("/compras")
 @CrossOrigin(origins = "*")
 public class CompraController {
     @Autowired

@@ -176,19 +176,6 @@ public class ProductoController {
     }
 
     /**
-     * DELETE /api/productos/{id}
-     * Elimina un producto
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> eliminar(@PathVariable Long id) {
-        productoService.eliminar(id);
-        Map<String, Object> response = new HashMap<>();
-        response.put("mensaje", "Producto eliminado exitosamente");
-        response.put("id", id);
-        return ResponseEntity.ok(response);
-    }
-
-    /**
      * DELETE /api/productos/{id}/desactivar
      * Desactiva un producto sin eliminarlo
      */

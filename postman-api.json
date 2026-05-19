@@ -1,0 +1,340 @@
+{
+  "info": {
+    "name": "API Productos y Compras - Pruebas",
+    "_postman_id": "d23c5b10-1111-4444-9999-abcdef123456",
+    "description": "Colección de pruebas para la API REST de Productos y Compras (sin login).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1 - GET Productos (listar)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/productos",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 - POST Producto (crear)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Shampoo Wolf\",\n  \"descripcion\": \"Shampoo para cabello\",\n  \"precio\": 25000,\n  \"stock\": 20,\n  \"categoria\": \"Cabello\",\n  \"activo\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/productos",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 201 o 200\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "",
+              "var jsonData = pm.response.json();",
+              "",
+              "if(jsonData.datos && jsonData.datos.id){",
+              "    pm.environment.set(\"productId\", jsonData.datos.id);",
+              "} else if(jsonData.dato && jsonData.dato.id){",
+              "    pm.environment.set(\"productId\", jsonData.dato.id);",
+              "} else if(jsonData.id){",
+              "    pm.environment.set(\"productId\", jsonData.id);",
+              "}",
+              "",
+              "pm.test(\"Producto creado y guardado en variable productId\", function(){",
+              "    pm.expect(pm.environment.get(\"productId\")).to.not.be.undefined;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 - GET Producto por ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/productos/3",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos", "3"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 - PUT Producto (actualizar)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Shampoo Wolf Pro\",\n  \"descripcion\": \"Shampoo mejorado\",\n  \"precio\": 30000,\n  \"stock\": 15,\n  \"categoria\": \"Cabello\",\n  \"activo\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/productos/2",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos", "2"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5 - PATCH Producto (stock parcial)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"stock\": 5\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/productos/2",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos", "2"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6 - DELETE Producto (desactivar)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/productos/2/desactivar",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos", "2", "desactivar"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7 - GET Productos activos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/productos/activos/lista",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos", "activos", "lista"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8 - GET Categorías",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/productos/categorias",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos", "categorias"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9 - GET Buscar producto (q)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/productos/buscar?q=Shampoo",
+          "host": ["http://localhost:8080/api"],
+          "path": ["productos", "buscar"],
+          "query": [
+            {
+              "key": "q",
+              "value": "Shampoo"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - POST Compra (crear)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productoId\": 2,\n  \"cantidad\": 2,\n  \"total\": 1799.98\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/compras",
+          "host": ["http://localhost:8080/api"],
+          "path": ["compras"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200 o 201\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 - GET Compras (listar)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/compras",
+          "host": ["http://localhost:8080/api"],
+          "path": ["compras"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api"
+    },
+    {
+      "key": "productId",
+      "value": ""
+    }
+  ]
+}

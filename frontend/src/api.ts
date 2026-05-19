@@ -12,7 +12,6 @@ export const obtenerProducto = (id: number) => api.get(`/productos/${id}`);
 export const crearProducto = (data: any) => api.post("/productos", data);
 export const actualizarProducto = (id: number, data: any) =>
   api.put(`/productos/${id}`, data);
-export const eliminarProducto = (id: number) => api.delete(`/productos/${id}`);
 export const obtenerCategorias = () => api.get("/productos/categorias");
 export const buscarProductos = (texto: string) =>
   api.get(`/productos/buscar?texto=${encodeURIComponent(texto)}`);

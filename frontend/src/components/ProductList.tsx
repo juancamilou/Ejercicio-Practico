@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   actualizarProducto,
   buscarProductos,
-  eliminarProducto,
   obtenerCategorias,
   obtenerProductos,
   obtenerProductosPorCategoria,
@@ -46,7 +45,9 @@ export default function ProductList() {
   const [categorias, setCategorias] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
   const [sort, setSort] = useState<string>("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "active" | "inactive"
+  >("all");
   const { addToast } = useToast();
   const [alertDialog, setAlertDialog] = useState<{
     isOpen: boolean;
@@ -103,21 +104,22 @@ export default function ProductList() {
 
   const applyFiltersAndSort = (list: any[]) => {
     let filtered = [...list];
-    
+
     // Aplicar filtro de estado
     if (statusFilter === "active") {
       filtered = filtered.filter((p) => p.activo === true);
     } else if (statusFilter === "inactive") {
       filtered = filtered.filter((p) => p.activo === false);
     }
-    
+
     // Aplicar ordenamiento
     if (!sort) return filtered;
     const copy = [...filtered];
     if (sort === "price-asc") return copy.sort((a, b) => a.precio - b.precio);
     if (sort === "price-desc") return copy.sort((a, b) => b.precio - a.precio);
     if (sort === "stock-desc") return copy.sort((a, b) => b.stock - a.stock);
-    if (sort === "active-first") return copy.sort((a, b) => (b.activo ? 1 : -1) - (a.activo ? 1 : -1));
+    if (sort === "active-first")
+      return copy.sort((a, b) => (b.activo ? 1 : -1) - (a.activo ? 1 : -1));
     return copy;
   };
 
@@ -147,28 +149,6 @@ export default function ProductList() {
     fetch();
     fetchCategorias();
   }, []);
-
-  const handleDelete = async (id: number) => {
-    setAlertDialog({
-      isOpen: true,
-      type: "error",
-      title: "Eliminar Producto",
-      message:
-        "¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.",
-      onConfirm: async () => {
-        try {
-          await eliminarProducto(id);
-          addToast("Producto eliminado exitosamente", "success");
-          fetch();
-        } catch (err) {
-          addToast("Error al eliminar el producto", "error");
-          console.error(err);
-        } finally {
-          setAlertDialog({ ...alertDialog, isOpen: false });
-        }
-      },
-    });
-  };
 
   return (
     <div className="space-y-4">
@@ -253,7 +233,9 @@ export default function ProductList() {
           <select
             className="border-2 border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:border-indigo-500 transition"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as "all" | "active" | "inactive")}
+            onChange={(e) =>
+              setStatusFilter(e.target.value as "all" | "active" | "inactive")
+            }
           >
             <option value="all">📊 Todos los estados</option>
             <option value="active">✅ Solo activos</option>
@@ -276,9 +258,15 @@ export default function ProductList() {
         {/* Información de resultados */}
         {!loading && (
           <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded">
-            <span className="font-semibold text-gray-800">{productos.length}</span> producto{productos.length !== 1 ? 's' : ''} 
+            <span className="font-semibold text-gray-800">
+              {productos.length}
+            </span>{" "}
+            producto{productos.length !== 1 ? "s" : ""}
             {statusFilter !== "all" && (
-              <span> ({statusFilter === "active" ? "activos" : "inactivos"})</span>
+              <span>
+                {" "}
+                ({statusFilter === "active" ? "activos" : "inactivos"})
+              </span>
             )}
           </div>
         )}
@@ -292,8 +280,12 @@ export default function ProductList() {
       ) : productos.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-lg shadow-md">
           <p className="text-4xl mb-4">📭</p>
-          <p className="text-gray-500 text-lg font-semibold">No hay productos para mostrar</p>
-          <p className="text-gray-400 mt-2">Intenta cambiar los filtros o agregar un nuevo producto</p>
+          <p className="text-gray-500 text-lg font-semibold">
+            No hay productos para mostrar
+          </p>
+          <p className="text-gray-400 mt-2">
+            Intenta cambiar los filtros o agregar un nuevo producto
+          </p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -310,7 +302,9 @@ export default function ProductList() {
                 {/* Encabezado */}
                 <div className="flex justify-between items-start gap-2">
                   <div className="flex-1">
-                    <h3 className="font-bold text-lg text-gray-800">{p.nombre}</h3>
+                    <h3 className="font-bold text-lg text-gray-800">
+                      {p.nombre}
+                    </h3>
                     <div className="flex gap-2 mt-1 flex-wrap">
                       <span
                         className={`text-xs px-3 py-1 rounded-full font-semibold ${
@@ -329,13 +323,19 @@ export default function ProductList() {
                 </div>
 
                 {/* Descripción */}
-                <p className="text-gray-600 text-sm line-clamp-2">{p.descripcion}</p>
+                <p className="text-gray-600 text-sm line-clamp-2">
+                  {p.descripcion}
+                </p>
 
                 {/* Precio y Stock */}
                 <div className="flex justify-between items-end pt-2 border-t">
                   <div>
-                    <p className="text-xs text-gray-500 uppercase tracking-wide">Precio</p>
-                    <p className="text-2xl font-bold text-green-600">{formatCOP(p.precio)}</p>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">
+                      Precio
+                    </p>
+                    <p className="text-2xl font-bold text-green-600">
+                      {formatCOP(p.precio)}
+                    </p>
                   </div>
                   <StockBadge stock={p.stock} />
                 </div>

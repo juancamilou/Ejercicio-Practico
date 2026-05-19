@@ -1,0 +1,13 @@
+com\productos\api\dto\ProductoDTO.class
+com\productos\api\service\CompraService.class
+com\productos\api\ApiRestProductosApplication.class
+com\productos\api\exception\ErrorResponse.class
+com\productos\api\service\ProductoService.class
+com\productos\api\controller\CompraController.class
+com\productos\api\model\Compra.class
+com\productos\api\repository\CompraRepository.class
+com\productos\api\controller\ProductoController.class
+com\productos\api\exception\ProductoNoEncontradoException.class
+com\productos\api\repository\ProductoRepository.class
+com\productos\api\model\Producto.class
+com\productos\api\exception\GlobalExceptionHandler.class

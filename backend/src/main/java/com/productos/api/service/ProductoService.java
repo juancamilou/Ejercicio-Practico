@@ -1,16 +1,17 @@
 package com.productos.api.service;
 
-import com.productos.api.dto.ProductoDTO;
-import com.productos.api.exception.ProductoNoEncontradoException;
-import com.productos.api.model.Producto;
-import com.productos.api.repository.ProductoRepository;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.productos.api.dto.ProductoDTO;
+import com.productos.api.exception.ProductoNoEncontradoException;
+import com.productos.api.model.Producto;
+import com.productos.api.repository.ProductoRepository;
 
 @Service
 @Transactional
@@ -152,15 +153,6 @@ public class ProductoService {
 
         Producto productoActualizado = productoRepository.save(producto);
         return convertirADTO(productoActualizado);
-    }
-
-    /**
-     * Elimina un producto
-     */
-    public void eliminar(Long id) {
-        Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new ProductoNoEncontradoException("Producto con ID " + id + " no encontrado"));
-        productoRepository.delete(producto);
     }
 
     /**
